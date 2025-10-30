@@ -16,6 +16,23 @@ export default function InvoiceHeader({ profile, customers, invoiceMaster }: Pro
 
   const customer = customers.find((c) => c.id === invoiceMaster.customerId);
 
+  // helper to check if a value is valid (not nill / empty)
+  const isValid = (value?: string | number | Date) => {
+    if (!value) return false;
+    if (typeof value === "string") {
+      const lower = value.toLowerCase().trim();
+      return (
+        lower !== "nill" &&
+        lower !== "nil" &&
+        lower !== "null" &&
+        lower !== "n/a" &&
+        lower !== "nill@nill" &&
+        lower !== ""
+      );
+    }
+    return true;
+  };
+
   return (
     <div className="border-b pb-2 print:border-black print:pb-2 text-[13px] leading-tight">
       {/* TAX INVOICE HEADING */}
@@ -36,14 +53,15 @@ export default function InvoiceHeader({ profile, customers, invoiceMaster }: Pro
             )}
             <div>
               <p className="font-bold text-base">{profile.companyName}</p>
-              <p className="text-xs">{profile.address}</p>
+              {isValid(profile.address) && <p className="text-xs">{profile.address}</p>}
             </div>
           </div>
 
           <div className="border p-2 rounded-md space-y-1 text-xs">
-            <p>Email: {profile.email}</p>
-            <p>Phone: {profile.phone}</p>
-            <p className="font-bold">GSTIN: {profile.gstin}</p>
+            {isValid(profile.email) && <p>Email: {profile.email}</p>}
+            {isValid(profile.phone) && <p>Phone: {profile.phone}</p>}
+            {isValid(profile.gstin) && <p className="font-bold">GSTIN: {profile.gstin}</p>}
+            {isValid(profile.fssai) && <p>FSSAI: {profile.fssai}</p>}
           </div>
         </div>
 
@@ -65,10 +83,27 @@ export default function InvoiceHeader({ profile, customers, invoiceMaster }: Pro
           <hr className="my-1 border-gray-400" />
 
           <div className="space-y-0.5">
-            <p><strong>CIN:</strong> {profile.cin}</p>
-            <p><strong>PAN:</strong> {profile.pan}</p>
-            <p><strong>DL No:</strong> {profile.dlno}</p>
-            <p><strong>DL Exp:</strong> {new Date(profile.dlexp).toLocaleDateString()}</p>
+            {isValid(profile.cin) && (
+              <p>
+                <strong>CIN:</strong> {profile.cin}
+              </p>
+            )}
+            {isValid(profile.pan) && (
+              <p>
+                <strong>PAN:</strong> {profile.pan}
+              </p>
+            )}
+            {isValid(profile.dlno) && (
+              <p>
+                <strong>DL No:</strong> {profile.dlno}
+              </p>
+            )}
+            {isValid(profile.dlexp) && (
+              <p>
+                <strong>DL Exp:</strong>{" "}
+                {new Date(profile.dlexp).toLocaleDateString()}
+              </p>
+            )}
           </div>
         </div>
 
@@ -78,12 +113,25 @@ export default function InvoiceHeader({ profile, customers, invoiceMaster }: Pro
             <>
               <p className="font-semibold text-base mb-1">Bill To:</p>
               <p className="font-semibold">{customer.companyName}</p>
-              <p>{customer.address}</p>
-              {/* <p>Email: {customer.email}</p> */}
-              <p>Phone: {customer.phone}</p>
-              <div className="border p-2 mt-1 rounded-md">
-                <p><strong>GSTIN:</strong> {customer.gstin}</p>
-                <p><strong>DL No:</strong> {customer.dlno}</p>
+              {isValid(customer.address) && <p>{customer.address}</p>}
+              {isValid(customer.phone) && <p>Phone: {customer.phone}</p>}
+
+              <div className="border p-2 mt-1 rounded-md space-y-0.5">
+                {isValid(customer.gstin) && (
+                  <p>
+                    <strong>GSTIN:</strong> {customer.gstin}
+                  </p>
+                )}
+                {isValid(customer.dlno) && (
+                  <p>
+                    <strong>DL No:</strong> {customer.dlno}
+                  </p>
+                )}
+                {isValid(customer.fssai) && (
+                  <p>
+                    <strong>FSSAI:</strong> {customer.fssai}
+                  </p>
+                )}
               </div>
             </>
           ) : (
