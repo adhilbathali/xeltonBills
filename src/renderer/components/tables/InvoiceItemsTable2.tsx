@@ -61,12 +61,14 @@ export default function InvoiceItemsTable2({
     setSubTotal(totalTaxable)
     setTaxAmount(totalTax)
 
-    // 👇 Include IGST in Grand Total if applicable
-    const grandWithIGST = igst > 0 ? totalGrand + (igst * totalGrand) : totalGrand
+    // ✅ Correct IGST percentage logic
+    const igstAmount = igst > 0 ? (totalTaxable * igst) / 100 : 0
+    const grandWithIGST = totalGrand + igstAmount
 
     updateGrandTotal(grandWithIGST)
     setGrandTotal(grandWithIGST)
   }, [localItems, products, igst])
+
 
   const handleDelete = (index: number) => {
     onDelete(index)
@@ -157,58 +159,63 @@ export default function InvoiceItemsTable2({
       </div>
 
       {/* Footer Totals */}
-      <div className="flex justify-end mt-3 pr-2 print:mt-1">
-        <table className="border print:border-black text-sm print:text-xs">
-          <tbody>
-            <tr>
-              <td className="px-3 py-1 border print:border-black font-semibold">
-                Total Taxable Value
-              </td>
-              <td className="px-3 py-1 border print:border-black text-right">
-                {subTotal.toFixed(2)}
-              </td>
-            </tr>
-            <tr>
-              <td className="px-3 py-1 border print:border-black font-semibold">
-                Total Tax Amount
-              </td>
-              <td className="px-3 py-1 border print:border-black text-right">
-                {taxAmount.toFixed(2)}
-              </td>
-            </tr>
+{/* Footer Totals */}
+<div className="flex justify-end mt-3 pr-2 print:mt-1">
+  <table className="border print:border-black text-sm print:text-xs">
+    <tbody>
+      <tr>
+        <td className="px-3 py-1 border print:border-black font-semibold">
+          Total Taxable Value
+        </td>
+        <td className="px-3 py-1 border print:border-black text-right">
+          {subTotal.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+        </td>
+      </tr>
+      <tr>
+        <td className="px-3 py-1 border print:border-black font-semibold">
+          Total Tax Amount
+        </td>
+        <td className="px-3 py-1 border print:border-black text-right">
+          {taxAmount.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+        </td>
+      </tr>
 
-            {/* 👇 Conditionally show IGST */}
-            {igst > 0 && (
-              <>
-                <tr>
-                <td className="px-3 py-1 border print:border-black font-semibold">
-                  IGST(%)
-                </td>
-                <td className="px-3 py-1 border print:border-black text-right">
-                  {igst.toFixed(2)}
-                </td>
-              </tr><tr>
-                <td className="px-3 py-1 border print:border-black font-semibold">
-                  IGST Amount
-                </td>
-                <td className="px-3 py-1 border print:border-black text-right">
-                  {(igst * taxAmount).toFixed(2)}
-                </td>
-              </tr>
-              </>
-            )}
+      {/* 👇 Show IGST only if applicable */}
+      {igst > 0 && (
+        <>
+          <tr>
+            <td className="px-3 py-1 border print:border-black font-semibold">
+              IGST (%)
+            </td>
+            <td className="px-3 py-1 border print:border-black text-right">
+              {igst.toFixed(2)}
+            </td>
+          </tr>
+          <tr>
+            <td className="px-3 py-1 border print:border-black font-semibold">
+              IGST Amount
+            </td>
+            <td className="px-3 py-1 border print:border-black text-right">
+              {((subTotal * igst) / 100).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+              })}
+            </td>
+          </tr>
+        </>
+      )}
 
-            <tr className="bg-gray-100 print:bg-transparent">
-              <td className="px-3 py-1 border print:border-black font-bold">
-                Grand Total (incl. GST{igst > 0 ? " + IGST" : ""})
-              </td>
-              <td className="px-3 py-1 border print:border-black text-right font-bold">
-                {grandTotal.toFixed(2)}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <tr className="bg-gray-100 print:bg-transparent">
+        <td className="px-3 py-1 border print:border-black font-bold">
+          Grand Total (incl. GST{igst > 0 ? " + IGST" : ""})
+        </td>
+        <td className="px-3 py-1 border print:border-black text-right font-bold">
+          {grandTotal.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
     </div>
   )
 }
