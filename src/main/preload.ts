@@ -1,8 +1,63 @@
 import { contextBridge, ipcRenderer } from "electron";
+import { Product } from "@/renderer/types/product";
+import { Customer } from "@/renderer/types/customer";
+import { CANDF } from "@/renderer/types/cAndF";
+import { PurchaseMaster } from "@/renderer/types/purchaseMaster";
+import { PurchaseItem } from "@/renderer/types/purchaseItem";
+import { InvoiceMaster } from "@/renderer/types/invoiceMaster";
+import { InvoiceItem } from "@/renderer/types/invoiceItem";
+import { Profile } from "@/renderer/types/profile";
 
 contextBridge.exposeInMainWorld("api", {
-  getTodos: () => ipcRenderer.invoke("getTodos"),
-  addTodo: (text: string) => ipcRenderer.invoke("addTodo", text),
-  toggleTodo: (id: number, done: boolean) => ipcRenderer.invoke("toggleTodo", id, done),
-  deleteTodo: (id: number) => ipcRenderer.invoke("deleteTodo", id)
+  // ============================
+  // PRODUCTS
+  // ============================
+  getProducts: () => ipcRenderer.invoke("getProducts"),
+  addProduct: (product: Product) => ipcRenderer.invoke("addProduct", product),
+  updateProduct: (product: Product) => ipcRenderer.invoke("updateProduct", product),
+  deleteProduct: (id: number) => ipcRenderer.invoke("deleteProduct", id),
+
+  // ============================
+  // CUSTOMERS
+  // ============================
+  getCustomers: () => ipcRenderer.invoke("getCustomers"),
+  addCustomer: (customer: Customer) => ipcRenderer.invoke("addCustomer", customer),
+  updateCustomer: (customer: Customer) => ipcRenderer.invoke("updateCustomer", customer),
+  deleteCustomer: (id: number) => ipcRenderer.invoke("deleteCustomer", id),
+
+  // ============================
+  // C&F
+  // ============================
+  getCandFs: () => ipcRenderer.invoke("getCandFs"),
+  addCandF: (candf: CANDF) => ipcRenderer.invoke("addCandF", candf),
+  updateCandF: (candf: CANDF) => ipcRenderer.invoke("updateCandF", candf),
+  deleteCandF: (id: number) => ipcRenderer.invoke("deleteCandF", id),
+
+  // ============================
+  // PURCHASES
+  // ============================
+  getPurchaseMasters: () => ipcRenderer.invoke("get-purchase-masters"),
+  addPurchaseMaster: (purchaseMaster: PurchaseMaster) => ipcRenderer.invoke("add-purchase-master", purchaseMaster),
+  deletePurchaseMaster: (id: number) => ipcRenderer.invoke("delete-purchase-master", id),
+  addPurchaseItems: ({ purchaseId, purchaseItems }: { purchaseId: number; purchaseItems: PurchaseItem[] }) =>
+    ipcRenderer.invoke("add-purchase-items", { purchaseId, purchaseItems }),
+
+  // ============================
+  // INVOICES
+  // ============================
+  getInvoiceMasters: () => ipcRenderer.invoke("get-invoice-masters"),
+  addInvoiceMaster: (invoiceMaster: InvoiceMaster) =>
+    ipcRenderer.invoke("add-invoice-master", invoiceMaster),
+  addInvoiceItems: ({ invoiceId, invoiceItems }: { invoiceId: number; invoiceItems: InvoiceItem[] }) =>
+    ipcRenderer.invoke("add-invoice-items", { invoiceId, invoiceItems }),
+  getInvoiceItems: () => ipcRenderer.invoke("get-invoice-items"),
+
+  deleteInvoiceMaster: (id: number) => ipcRenderer.invoke("delete-invoice-master", id),
+
+  getInvoiceMasterById: (id: number) => ipcRenderer.invoke("get-invoice-master-by-id", Math.floor(id)),
+  getInvoiceItemsByInvoiceId: (invoiceId: number) => ipcRenderer.invoke("get-invoice-items-by-invoice-id", Math.floor(invoiceId)),
+  printInvoice: (invoiceNumber: string) =>
+    ipcRenderer.invoke("print-invoice", invoiceNumber),
+  getProfile: () => ipcRenderer.invoke("get-profile"),
+  saveProfile: (profile: Profile) => ipcRenderer.invoke("save-profile", profile),
 });

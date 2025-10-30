@@ -1,18 +1,179 @@
-import Database from "better-sqlite3";
 import path from "path";
+import fs from "fs";
+import os from "os";
+import Database from "better-sqlite3";
 import { app } from "electron";
+let dbPath: string;
 
-const dbPath = path.join(app.getPath("userData"), "todos.db");
+// In production, Electron provides `app.getPath("userData")` (e.g., C:\Users\<You>\AppData\Roaming\<AppName>)
+try {
+  dbPath = path.join(app.getPath("userData"), "app.db");
+} catch {
+  // During dev, Electron's `app` might not be ready, fallback:
+  dbPath = path.join(os.homedir(), "app.db");
+}
+
+// Ensure the folder exists
+fs.mkdirSync(path.dirname(dbPath), { recursive: true });
+
+// Create or open the database
 const db = new Database(dbPath);
-console.log('DB path:', dbPath);
+db.pragma("foreign_keys = ON");
+
+console.log("📘 SQLite DB Path:", dbPath);
 
 
+// ============================
+// PRODUCTS TABLE
+// ============================
 db.prepare(`
-  CREATE TABLE IF NOT EXISTS todos (
+  CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    text TEXT NOT NULL,
-    done INTEGER DEFAULT 0
+    productCD TEXT,
+    hsn TEXT,
+    uom TEXT CHECK(uom IN ('Box', 'Pack', 'Bottle', 'Strip', 'Piece')),
+    mrp REAL,
+    ptr REAL,
+    pts REAL,
+    gst REAL
+  )
+`).run()
+
+// ============================
+// C&F / SUPPLIERS TABLE
+// ============================
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS candf (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    companyName TEXT,
+    companyAddress TEXT,
+    email TEXT,
+    phone TEXT,
+    gstin TEXT,
+    pan TEXT
+  )
+`).run()
+
+// ============================
+// CUSTOMERS TABLE
+// ============================
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS customers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    companyName TEXT,
+    address TEXT,
+    email TEXT,
+    phone TEXT,
+    gstin TEXT,
+    cin TEXT,
+    fssai TEXT,
+    pan TEXT,
+    dlno TEXT,
+    dlexp TEXT
+  )
+`).run()
+
+
+// ============================
+// PURCHASE MASTER TABLE
+// ============================
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS purchase_master (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    supplierId INTEGER,
+    PODate TEXT,
+    dueDate TEXT,
+    invoiceNumber TEXT,
+    igst REAL,
+    subTotal REAL,
+    grandTotal REAL,
+    FOREIGN KEY (supplierId) REFERENCES candf(id) ON DELETE SET NULL
   )
 `).run();
+
+// ============================
+// PURCHASE ITEMS TABLE
+// ============================
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS purchase_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    purchaseId INTEGER,
+    productId INTEGER,
+    purchaseRate REAL,
+    qty REAL,
+    fqty REAL,
+    total REAL,
+    disc REAL,
+    FOREIGN KEY (purchaseId) REFERENCES purchase_master(id) ON DELETE CASCADE,
+    FOREIGN KEY (productId) REFERENCES products(id)
+  )
+`).run();
+
+
+// ============================
+// INVOICE MASTER TABLE
+// ============================
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS invoice_master (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    customerId INTEGER,
+    invoiceDate TEXT,
+    dueDate TEXT,
+    invoiceNumber TEXT,
+    igst REAL,
+    subTotal REAL,
+    grandTotal REAL,
+    FOREIGN KEY (customerId) REFERENCES customers(id) ON DELETE SET NULL
+  )
+`).run();
+
+// ============================
+// INVOICE ITEMS TABLE
+// ============================
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS invoice_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    invoiceId INTEGER,
+    productId INTEGER,
+    tradePrice REAL,
+    qty REAL,
+    exp TEXT,
+    fqty REAL,
+    total REAL,
+    disc REAL,
+    FOREIGN KEY (invoiceId) REFERENCES invoice_master(id) ON DELETE CASCADE,
+    FOREIGN KEY (productId) REFERENCES products(id)
+  )
+`).run();
+
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS profile (
+    id INTEGER PRIMARY KEY,
+    companyName TEXT,
+    address TEXT,
+    email TEXT,
+    phone TEXT,
+    gstin TEXT,
+    cin TEXT,
+    fssai TEXT,
+    pan TEXT,
+    dlno TEXT,
+    dlexp TEXT
+  )
+`).run();
+
+
+// Check if the profile already exists (to avoid inserting duplicate dummy data)
+const existingProfile = db.prepare("SELECT * FROM profile WHERE id = 1").get();
+
+if (!existingProfile) {
+  // Insert dummy data if the profile doesn't exist yet
+  db.prepare(`
+    INSERT INTO profile (id, companyName, address, email, phone, gstin, cin, fssai, pan, dlno, dlexp)
+    VALUES
+      (1, 'ABC Pharma Ltd.', '123 Pharma Street, Bangalore, India', 'contact@abcpharma.com', '+91 98765 43210', '29ABCDE1234F1Z5', 'L24230MH1995PLC087123', '10012345012345', 'ABCDE1234F', 'DL123456789', '2030-12-31')
+  `).run();
+}
+
 
 export default db;
