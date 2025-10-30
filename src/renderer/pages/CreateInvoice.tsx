@@ -67,11 +67,11 @@ useEffect(() => {
 
   // ===== Calculate Totals =====
   useEffect(() => {
-    const subtotal = invoiceItems.reduce((acc, item) => acc + item.total, 0);
+    const subtotal = invoiceItems.reduce((acc, item) => acc + (item.taxableValue || 0), 0);
     setSubTotal(subtotal);
 
     const igst = headerData?.igst ?? 0;
-    const grand = subtotal + (igst / 100) * subtotal;
+    const grand = invoiceItems.reduce((acc, item) => acc + (item.total || 0), 0);
     setGrandTotal(grand);
   }, [invoiceItems, headerData]);
 

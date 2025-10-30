@@ -193,6 +193,25 @@ export default function EditProductDialog({ onEdit, product }: Props) {
                                         onChange={handleChange}
                                     />
                                 </Field>
+
+                                {/* PTD */}
+                <Field>
+                  <FieldLabel htmlFor="ptd">
+                    <span className="flex justify-center items-center">
+                      PTD (<IndianRupeeIcon size={15} />)
+                    </span>
+                  </FieldLabel>
+                  <Input required
+                    id="ptd"
+                    name="ptd"
+                    type="number"
+                    autoComplete="off"
+                    placeholder="price to depot"
+                    value={formData.ptd ?? ""}
+                    onChange={handleChange}
+                  />
+                </Field>
+                
                             </div>
                         </FieldGroup>
                         <DialogFooter className="mt-4">

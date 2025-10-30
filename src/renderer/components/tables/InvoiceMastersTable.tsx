@@ -38,7 +38,7 @@ export default function InvoiceMastersTable({
             <th className="p-2 border border-gray-300 text-center">Invoice Date</th>
             <th className="p-2 border border-gray-300 text-center">Due Date</th>
             <th className="p-2 border border-gray-300 text-right">Sub Total</th>
-            <th className="p-2 border border-gray-300 text-center">IGST %</th>
+            {/* <th className="p-2 border border-gray-300 text-center">IGST %</th> */}
             <th className="p-2 border border-gray-300 text-right">Grand Total</th>
             <th className="p-2 border border-gray-300 text-center">Manage</th>
           </tr>
@@ -57,7 +57,7 @@ export default function InvoiceMastersTable({
                 <td className="p-2 border border-gray-300 text-center">{invoiceDate}</td>
                 <td className="p-2 border border-gray-300 text-center">{new Date(inv.dueDate).toLocaleDateString()}</td>
                 <td className="p-2 border border-gray-300 text-right">{inv.subTotal.toFixed(2)}</td>
-                <td className="p-2 border border-gray-300 text-center">{inv.igst}%</td>
+                {/* <td className="p-2 border border-gray-300 text-center">{inv.igst}%</td> */}
                 <td className="p-2 border border-gray-300 text-right font-semibold">
                   {inv.grandTotal.toFixed(2)}
                 </td>

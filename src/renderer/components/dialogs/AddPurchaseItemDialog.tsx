@@ -27,6 +27,7 @@ export default function AddPurchaseItemDialog({ onAdd, products }: Props) {
 
   const [product, setProduct] = useState<Product>({
     id: null,
+    ptd: null,
     productCD: "",
     hsn: "",
     uom: null,
@@ -59,6 +60,7 @@ export default function AddPurchaseItemDialog({ onAdd, products }: Props) {
     onAdd(formData);
     const emptyProduct: Product = {
       id: null,
+      ptd: null,
       productCD: "",
       hsn: "",
       uom: null,

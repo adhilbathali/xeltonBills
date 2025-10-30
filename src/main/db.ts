@@ -35,6 +35,7 @@ db.prepare(`
     mrp REAL,
     ptr REAL,
     pts REAL,
+    ptd REAL,
     gst REAL
   )
 `).run()
@@ -171,7 +172,7 @@ if (!existingProfile) {
   db.prepare(`
     INSERT INTO profile (id, companyName, address, email, phone, gstin, cin, fssai, pan, dlno, dlexp)
     VALUES
-      (1, 'ABC Pharma Ltd.', '123 Pharma Street, Bangalore, India', 'contact@abcpharma.com', '+91 98765 43210', '29ABCDE1234F1Z5', 'L24230MH1995PLC087123', '10012345012345', 'ABCDE1234F', 'DL123456789', '2030-12-31')
+      (1, 'XELTON PHARMA PRIVATE LIMITED', 'Door No.26/356A-1, AARTHUNKAL, Muvattupuzha, Ernakulam, Kerala, 686661', 'xeltonpharmaltd@gmail.com', '+91 94954 08274', '32AAACX5279M1ZW', 'U46497MH2024PTC435400', 'nill', 'AAACX5279M', 'WLF21B2025KL000529', '2030-03-26')
   `).run();
 }
 

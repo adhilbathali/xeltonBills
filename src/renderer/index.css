@@ -145,6 +145,7 @@
       visibility: visible;
     }
 
+
     #printable-area {
       position: absolute;
       left: 0;
@@ -187,3 +188,5 @@
     @apply bg-background text-foreground;
   }
 }
+
+

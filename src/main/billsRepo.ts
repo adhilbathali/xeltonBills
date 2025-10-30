@@ -17,20 +17,20 @@ export function getProducts(): Product[] {
 }
 
 export function addProduct(product: Product) {
-  const { productCD, hsn, uom, mrp, ptr, pts, gst } = product;
+  const { productCD, hsn, uom, mrp, ptr, pts, ptd, gst } = product;
 
   const stmt = db.prepare(`
-    INSERT INTO products (productCD, hsn, uom, mrp, ptr, pts, gst)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO products (productCD, hsn, uom, mrp, ptr, pts, ptd, gst)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
-  stmt.run(productCD, hsn, uom, mrp, ptr, pts, gst);
+  stmt.run(productCD, hsn, uom, mrp, ptr, pts, ptd, gst);
 
   return product;
 }
 
 export function updateProduct(product: Product) {
-  const { id, productCD, hsn, uom, mrp, ptr, pts, gst } = product;
+  const { id, productCD, hsn, uom, mrp, ptr, pts, ptd, gst } = product;
 
   if (!id) throw new Error("Product ID is required for update.");
 
@@ -42,11 +42,12 @@ export function updateProduct(product: Product) {
       mrp = ?,
       ptr = ?,
       pts = ?,
+      ptd = ?,
       gst = ?
     WHERE id = ?
   `);
 
-  stmt.run(productCD, hsn, uom, mrp, ptr, pts, gst, id);
+  stmt.run(productCD, hsn, uom, mrp, ptr, pts, ptd, gst, id);
 
   return product;
 }

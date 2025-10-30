@@ -7,5 +7,6 @@ export interface InvoiceItem {
     exp: Date;
     fqty: number;
     total: number;
+    taxableValue?: number;
     disc: number;
 }

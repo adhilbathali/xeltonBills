@@ -148,18 +148,6 @@ export default function EditPurchaseItemDialog({ onEdit, purchaseItem, products 
                   </Select>
                 </Field>
 
-                {/* EXP */}
-                <Field>
-                  <FieldLabel htmlFor="exp">EXP</FieldLabel>
-                  <Input
-                    type="date"
-                    id="exp"
-                    name="exp"
-                    required
-                    value={product.exp.toISOString().split("T")[0]}
-                  />
-                </Field>
-
                 {/* MRP */}
                 <Field>
                   <FieldLabel htmlFor="mrp">

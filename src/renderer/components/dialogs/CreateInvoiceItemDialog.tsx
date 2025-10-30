@@ -30,12 +30,19 @@ export default function CreateInvoiceItemDialog({ products, onAddItem }: Props) 
         qty: 0,
         fqty: 0,
         exp: getToday(),
+        gst: 0,
         disc: 0,
     })
 
     const handleSelectProduct = (product: Product) => {
-        setFormData((prev) => ({ ...prev, productId: product.id, tradePrice: product.ptr }))
-    }
+        setFormData((prev) => ({
+          ...prev,
+          productId: product.id,
+          tradePrice: product.ptd,
+          gst: product.gst || 0, // ✅ automatically fetch GST from product
+        }));
+      };
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -46,36 +53,41 @@ export default function CreateInvoiceItemDialog({ products, onAddItem }: Props) 
     }
 
     const calculateTotal = () => {
-        const { tradePrice, qty, disc } = formData
-        const total = tradePrice * qty - (tradePrice * qty * disc) / 100
-        return isNaN(total) ? 0 : total
-    }
+        const { tradePrice, qty, disc, gst } = formData;
+        const taxable = tradePrice * qty - (tradePrice * qty * disc) / 100;
+        const total = taxable + (taxable * gst) / 100;
+        return isNaN(total) ? 0 : total;
+      };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
 
-        // Simple manual validation
-        if (!formData.productId) return alert("Please select a product")
-        if (formData.qty <= 0) return alert("Quantity must be greater than 0")
+      const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
 
-        const total = calculateTotal()
+        if (!formData.productId) return alert("Please select a product");
+        if (formData.qty <= 0) return alert("Quantity must be greater than 0");
+
+        const taxableValue = formData.tradePrice * formData.qty - (formData.tradePrice * formData.qty * formData.disc) / 100;
+        const total = taxableValue + (taxableValue * formData.gst) / 100;
+
         onAddItem({
-            ...formData,
-            exp: new Date(formData.exp),
-            total,
-        })
+          ...formData,
+          exp: new Date(formData.exp),
+          taxableValue,
+          total,
+        });
 
-        // Reset
         setFormData({
-            productId: 0,
-            tradePrice: 0,
-            qty: 0,
-            fqty: 0,
-            exp: getToday(),
-            disc: 0,
-        })
-        setOpen(false)
-    }
+          productId: 0,
+          tradePrice: 0,
+          qty: 0,
+          fqty: 0,
+          exp: getToday(),
+          disc: 0,
+          gst: 0,
+        });
+        setOpen(false);
+      };
+
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
