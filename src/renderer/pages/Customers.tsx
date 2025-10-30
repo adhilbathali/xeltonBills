@@ -80,7 +80,7 @@ export default function Customers() {
       </section>
 
       {/* ===== Customer Cards Section ===== */}
-      <main className="flex-1 overflow-auto mt-4">
+      <main className="flex-1 mt-4">
         {customers.length === 0 ? (
           <div className="flex flex-col justify-center items-center h-60 text-slate-500">
             <p className="text-lg">No customers found.</p>

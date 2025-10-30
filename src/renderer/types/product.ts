@@ -7,5 +7,6 @@ export interface Product {
   mrp: number;
   ptr: number;
   pts: number;
+  ptd: number;
   gst: number;
 }

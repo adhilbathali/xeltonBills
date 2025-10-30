@@ -75,7 +75,7 @@ export default function ProfilePage() {
     <div className="min-h-screen w-full bg-background text-foreground flex flex-col items-center py-10 px-6">
       {/* Header */}
       <header className="w-full max-w-5xl flex items-center justify-between mb-8">
-        <h1 className="text-4xl tracking-tight text-slate-800 font-black">
+        <h1 className="text-4xl tracking-tight text-slate-800 font-bold">
           Company Profile
         </h1>
         <EditProfileDialog profile={profile} onEdit={handleUpdateProfile} />

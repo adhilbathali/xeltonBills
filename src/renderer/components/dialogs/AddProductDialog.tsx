@@ -78,7 +78,7 @@ export default function AddProductDialog({ onAdd }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="font-black">+ Add Product</Button>
+        <Button className="">+ Add Product</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
