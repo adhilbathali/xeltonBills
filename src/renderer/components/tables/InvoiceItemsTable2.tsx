@@ -129,7 +129,7 @@ export default function InvoiceItemsTable2({
                     <TableCell className="border print:border-black px-2 py-1 text-right">{item.qty}</TableCell>
                     <TableCell className="border print:border-black px-2 py-1 text-right">{item.fqty}</TableCell>
                     <TableCell className="border print:border-black px-2 py-1 text-right">
-                      {new Date(item.exp).toLocaleDateString()}
+                      {new Date(item.exp).toLocaleDateString("en-GB")}
                     </TableCell>
                     <TableCell className="border print:border-black px-2 py-1 text-right">{product?.mrp.toFixed(2)}</TableCell>
                     <TableCell className="border print:border-black px-2 py-1 text-right">{product?.ptr.toFixed(2)}</TableCell>

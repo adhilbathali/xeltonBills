@@ -27,14 +27,22 @@ export default function Customers() {
     );
   };
 
-  useEffect(() => {
-    const fetchCustomers = async () => {
+useEffect(() => {
+  const fetchCustomers = async () => {
+    if (!window.api?.getCustomers) {
+      console.error("API not ready yet");
+      return;
+    }
+    try {
       const data = (await window.api.getCustomers()) as Customer[];
       setCustomers(data);
-    };
+    } catch (err) {
+      console.error("Error fetching customers:", err);
+    }
+  };
+  fetchCustomers();
+}, []);
 
-    fetchCustomers();
-  }, []);
 
   const totalCustomers = customers.length;
 

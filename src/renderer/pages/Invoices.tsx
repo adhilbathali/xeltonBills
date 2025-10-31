@@ -63,43 +63,48 @@ export default function Invoices() {
       </div>
 
       {/* === Quick Stats Section === */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="rounded-2xl shadow-sm">
-          <CardHeader>
-            <CardTitle>Total Invoices</CardTitle>
-          </CardHeader>
-          <CardContent className="text-2xl font-bold text-slate-700">
-            {totalInvoices}
-          </CardContent>
-        </Card>
+{/* === Quick Stats Section === */}
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  <Card className="rounded-2xl shadow-sm">
+    <CardHeader>
+      <CardTitle>Total Invoices</CardTitle>
+    </CardHeader>
+    <CardContent className="text-2xl font-bold text-slate-700">
+      {totalInvoices.toLocaleString("en-IN")}
+    </CardContent>
+  </Card>
 
-        <Card className="rounded-2xl shadow-sm">
-          <CardHeader>
-            <CardTitle>Total Sales</CardTitle>
-          </CardHeader>
-          <CardContent className="text-2xl font-bold text-green-600">
-            ₹{totalSales.toLocaleString()}
-          </CardContent>
-        </Card>
+  <Card className="rounded-2xl shadow-sm">
+    <CardHeader>
+      <CardTitle>Total Sales</CardTitle>
+    </CardHeader>
+    <CardContent className="text-2xl font-bold text-green-600">
+      ₹{totalSales.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
+    </CardContent>
+  </Card>
 
-        <Card className="rounded-2xl shadow-sm">
-          <CardHeader>
-            <CardTitle>Items Sold</CardTitle>
-          </CardHeader>
-          <CardContent className="text-2xl font-bold text-blue-600">
-            {totalItemsSold}
-          </CardContent>
-        </Card>
+  <Card className="rounded-2xl shadow-sm">
+    <CardHeader>
+      <CardTitle>Items Sold</CardTitle>
+    </CardHeader>
+    <CardContent className="text-2xl font-bold text-blue-600">
+      {totalItemsSold.toLocaleString("en-IN")}
+    </CardContent>
+  </Card>
 
-        <Card className="rounded-2xl shadow-sm">
-          <CardHeader>
-            <CardTitle>Average Invoice</CardTitle>
-          </CardHeader>
-          <CardContent className="text-2xl font-bold text-slate-600">
-            ₹{avgInvoiceValue.toFixed(2)}
-          </CardContent>
-        </Card>
-      </div>
+  <Card className="rounded-2xl shadow-sm">
+    <CardHeader>
+      <CardTitle>Average Invoice Amount</CardTitle>
+    </CardHeader>
+    <CardContent className="text-2xl font-bold text-slate-600">
+      ₹{avgInvoiceValue.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}
+    </CardContent>
+  </Card>
+</div>
+
 
       {/* === Invoice Table === */}
       <Card className="rounded-2xl shadow-sm">

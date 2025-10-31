@@ -8,16 +8,28 @@ import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
 import path from 'path';
 
+// KEEP THIS IMPORT for now, but its function is being bypassed for better-sqlite3
+import { AutoUnpackNativesPlugin } from '@electron-forge/plugin-auto-unpack-natives';
+
 const config: ForgeConfig = {
   packagerConfig: {
-    asar: true,
-    // ✅ use path.join for cross-platform correctness
-    icon: path.join(__dirname, 'src', 'renderer', 'asset', 'icon'), // ⚠️ no .ico extension here
+    asar: true, // Keep ASAR true for the rest of the app
+    // *** ADD THIS: A custom ignore function to exclude better-sqlite3 from ASAR ***
+    ignore: (filePath) => {
+      // This regex will ignore anything inside the better-sqlite3 node_modules folder
+      // for being packed into app.asar. It will then be placed directly in resources/app/
+      const shouldIgnore = filePath.includes('node_modules\\better-sqlite3');
+      if (shouldIgnore) {
+        console.log(`Excluding from ASAR: ${filePath}`); // Optional: for debugging
+      }
+      return shouldIgnore;
+    },
+    icon: path.join(__dirname, 'src', 'renderer', 'asset', 'icon'),
   },
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({
-      setupIcon: path.join(__dirname, 'src', 'renderer', 'asset', 'icon.ico'), // ✅ include .ico here
+      setupIcon: path.join(__dirname, 'src', 'renderer', 'asset', 'icon.ico'),
     }),
     new MakerZIP({}, ['darwin']),
     new MakerRpm({}),
@@ -44,6 +56,8 @@ const config: ForgeConfig = {
         },
       ],
     }),
+    // Keep this plugin. It might still handle other native modules or be required.
+    new AutoUnpackNativesPlugin({}),
     new FusesPlugin({
       version: FuseVersion.V1,
       [FuseV1Options.RunAsNode]: false,

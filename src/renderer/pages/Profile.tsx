@@ -19,6 +19,10 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const loadProfile = async () => {
+       if (!window.api?.getProfile) {
+      console.error("API not ready yet");
+      return;
+    }
       try {
         const data = await window.api.getProfile();
         if (data) setProfile(data);
@@ -75,7 +79,7 @@ export default function ProfilePage() {
     <div className="min-h-screen w-full bg-background text-foreground flex flex-col items-center py-10 px-6">
       {/* Header */}
       <header className="w-full max-w-5xl flex items-center justify-between mb-8">
-        <h1 className="text-4xl tracking-tight text-slate-800 font-bold">
+        <h1 className="text-4xl tracking-tight text-slate-800 font-semibold">
           Company Profile
         </h1>
         <EditProfileDialog profile={profile} onEdit={handleUpdateProfile} />
@@ -143,7 +147,7 @@ export default function ProfilePage() {
             <CalendarIcon className="h-5 w-5 text-muted-foreground" />
             <span>
               <strong>DL Expiry:</strong>{" "}
-              {profile.dlexp ? new Date(profile.dlexp).toLocaleDateString() : "N/A"}
+              {profile.dlexp ? new Date(profile.dlexp).toLocaleDateString("en-GB") : "N/A"}
             </span>
           </div>
         </CardContent>

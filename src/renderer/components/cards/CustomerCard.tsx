@@ -74,7 +74,7 @@ export default function CustomerCard({ onEdit, onDelete, customer }: Props) {
 
         <div className="flex items-center gap-2">
           <Calendar className="text-primary w-4 h-4" />
-          <span>DL Expiry: {customer.dlexp ? new Date(customer.dlexp).toLocaleDateString() : "—"}</span>
+          <span>DL Expiry: {customer.dlexp ? new Date(customer.dlexp).toLocaleDateString("en-GB") : "—"}</span>
         </div>
       </div>
     </div>

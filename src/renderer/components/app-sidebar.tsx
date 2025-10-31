@@ -1,4 +1,5 @@
 import { Home, Settings, PencilIcon, PillBottleIcon, LucideUserStar, UserCircle, CreditCardIcon, ShoppingBagIcon, ShoppingCart, TruckIcon } from "lucide-react"
+import { Link } from "react-router-dom";
 
 import {
   Sidebar,
@@ -13,42 +14,12 @@ import {
 
 // Menu items.
 const items = [
-  // {
-  //   title: "Home",
-  //   url: "/",
-  //   icon: Home,
-  // },
-  // {
-  //   title: "Purchases",
-  //   url: "purchases",
-  //   icon: ShoppingCart,
-  // },
-  {
-    title: "Invoices",
-    url: "/invoices",
-    icon: PencilIcon,
-  },
-  {
-    title: "Products",
-    url: "/products",
-    icon: PillBottleIcon,
-  },
-  // {
-  //   title: "Suppliers",
-  //   url: "c&f",
-  //   icon: TruckIcon,
-  // },
-  {
-    title: "Customers",
-    url: "customers",
-    icon: LucideUserStar,
-  },
-  {
-    title: "Profile",
-    url: "profile",
-    icon: UserCircle,
-  },
-]
+  { title: "Invoices", url: "/invoices", icon: PencilIcon },
+  { title: "Products", url: "/products", icon: PillBottleIcon },
+  { title: "Customers", url: "/customers", icon: LucideUserStar },
+  { title: "Profile", url: "/profile", icon: UserCircle },
+];
+
 
 export function AppSidebar() {
   return (
@@ -61,11 +32,12 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url} className="py-5">
-                      <item.icon />
-                      <span className="text-lg">{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
+  <Link to={item.url} className="py-5">
+    <item.icon />
+    <span className="text-lg">{item.title}</span>
+  </Link>
+</SidebarMenuButton>
+
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

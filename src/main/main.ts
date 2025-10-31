@@ -9,6 +9,10 @@ if (started) {
   app.quit();
 }
 
+// These are injected by Electron Forge/Vite, useful for differentiating dev/prod
+declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string;
+declare const MAIN_WINDOW_VITE_NAME: string;
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -16,6 +20,8 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
     },
   });
 
@@ -28,8 +34,12 @@ const createWindow = () => {
     );
   }
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // <--- MODIFIED SECTION START --->
+  // Conditionally Open the DevTools only in development mode
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) { // This variable is only defined when running 'npm run start'
+    mainWindow.webContents.openDevTools();
+  }
+  // <--- MODIFIED SECTION END --->
 };
 
 // This method will be called when Electron has finished
@@ -56,4 +66,3 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-

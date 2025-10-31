@@ -16,14 +16,14 @@ function App() {
     <Layout>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/invoices" element={<Invoices />} />
-        <Route path="/create-invoice" element={<CreateInvoice />} />
         <Route path="/products" element={<Products />} />
         <Route path="/customers" element={<Customers />} />
         <Route path="/purchases" element={<Purchases/>} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/c&f" element={<CAndF />} />
         <Route path="/create-purchase" element={<CreatePurchase />} />
+        <Route path="/create-invoice" element={<CreateInvoice />} />
+        <Route path="/invoices" element={<Invoices />} />
         <Route path="/view-invoice/:id" element={<ViewInvoice />} />
       </Routes>
     </Layout>

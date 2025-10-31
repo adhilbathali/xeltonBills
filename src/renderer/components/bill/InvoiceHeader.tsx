@@ -73,11 +73,11 @@ export default function InvoiceHeader({ profile, customers, invoiceMaster }: Pro
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Invoice Date:</span>
-            <span>{new Date(invoiceMaster.invoiceDate).toLocaleDateString()}</span>
+            <span>{new Date(invoiceMaster.invoiceDate).toLocaleDateString("en-GB")}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium">Due Date:</span>
-            <span>{new Date(invoiceMaster.dueDate).toLocaleDateString()}</span>
+            <span>{new Date(invoiceMaster.dueDate).toLocaleDateString("en-GB")}</span>
           </div>
 
           <hr className="my-1 border-gray-400" />
@@ -101,7 +101,7 @@ export default function InvoiceHeader({ profile, customers, invoiceMaster }: Pro
             {isValid(profile.dlexp) && (
               <p>
                 <strong>DL Exp:</strong>{" "}
-                {new Date(profile.dlexp).toLocaleDateString()}
+                {new Date(profile.dlexp).toLocaleDateString("en-GB")}
               </p>
             )}
           </div>

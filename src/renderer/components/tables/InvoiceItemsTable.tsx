@@ -82,7 +82,7 @@ export default function InvoiceItemsTable({
                                 "F.Qty",
                                 "Exp",
                                 "MRP",
-                                "PTD",
+                                "Rate",
                                 "GST%",
                                 "Disc%",
                                 "Total",
@@ -120,7 +120,7 @@ export default function InvoiceItemsTable({
                                         <TableCell className="px-3 py-2 text-right print:px-2 print:py-1">{item.qty}</TableCell>
                                         <TableCell className="px-3 py-2 text-right print:px-2 print:py-1">{item.fqty}</TableCell>
                                         <TableCell className="px-3 py-2 text-right print:px-2 print:py-1">
-                                            {new Date(item.exp).toLocaleDateString()}
+                                            {new Date(item.exp).toLocaleDateString("en-GB")}
                                         </TableCell>
                                         <TableCell className="px-3 py-2 text-right print:px-2 print:py-1">
                                             {format(product?.mrp || 0)}
@@ -142,59 +142,63 @@ export default function InvoiceItemsTable({
             </div>
 
             {/* Footer Totals */}
-            <div className="flex justify-end mt-6 pr-2 print:mt-4">
-                <table className="w-auto text-sm border border-gray-300 rounded-md print:text-xs print:border-black">
-                    <tbody>
-                        <tr className="border-b border-gray-200 print:border-b-1 print:border-gray-300">
-                            <td className="px-4 py-2 font-semibold text-black print:px-3 print:py-1">
-                                Total Taxable Value
-                            </td>
-                            <td className="px-4 py-2 text-right font-medium print:px-3 print:py-1">
-                                ₹ {format(totalTaxable)}
-                            </td>
-                        </tr>
+{/* Footer Totals */}
+<div className="flex justify-end mt-6 pr-2 print:mt-4">
+  <table className="w-auto text-sm border border-gray-300 rounded-md print:text-xs print:border-black">
+    <tbody>
+      <tr className="border-b border-gray-200 print:border-b-1 print:border-gray-300">
+        <td className="px-4 py-2 font-semibold text-black print:px-3 print:py-1">
+          Taxable Value
+        </td>
+        <td className="px-4 py-2 text-right font-medium print:px-3 print:py-1">
+          ₹ {format(totalTaxable)}
+        </td>
+      </tr>
 
-                        <tr className="border-b border-gray-200 print:border-b-1 print:border-gray-300">
-                            <td className="px-4 py-2 font-semibold text-black print:px-3 print:py-1">
-                                Total Tax Amount
-                            </td>
-                            <td className="px-4 py-2 text-right font-medium print:px-3 print:py-1">
-                                ₹ {format(totalTaxAmount)}
-                            </td>
-                        </tr>
+      {igst > 0 ? (
+        <>
+          <tr className="border-b border-gray-200 print:border-b-1 print:border-gray-300">
+            <td className="px-4 py-2 font-semibold text-black print:px-3 print:py-1">
+              IGST ({igst.toFixed(2)}%)
+            </td>
+            <td className="px-4 py-2 text-right font-medium print:px-3 print:py-1">
+              ₹ {format(igstAmount)}
+            </td>
+          </tr>
+        </>
+      ) : (
+        <>
+          <tr className="border-b border-gray-200 print:border-b-1 print:border-gray-300">
+            <td className="px-4 py-2 font-semibold text-black print:px-3 print:py-1">
+              CGST Amount
+            </td>
+            <td className="px-4 py-2 text-right font-medium print:px-3 print:py-1">
+              ₹ {format(totalTaxAmount / 2)}
+            </td>
+          </tr>
+          <tr className="border-b border-gray-200 print:border-b-1 print:border-gray-300">
+            <td className="px-4 py-2 font-semibold text-black print:px-3 print:py-1">
+              SGST Amount
+            </td>
+            <td className="px-4 py-2 text-right font-medium print:px-3 print:py-1">
+              ₹ {format(totalTaxAmount / 2)}
+            </td>
+          </tr>
+        </>
+      )}
 
-                        {igst > 0 && (
-                            <>
-                                <tr className="border-b border-gray-200 print:border-b-1 print:border-gray-300">
-                                    <td className="px-4 py-2 font-semibold text-black print:px-3 print:py-1">
-                                        IGST (%)
-                                    </td>
-                                    <td className="px-4 py-2 text-right font-medium print:px-3 print:py-1">
-                                        {igst.toFixed(2)}%
-                                    </td>
-                                </tr>
-                                <tr className="border-b border-gray-200 print:border-b-1 print:border-gray-300">
-                                    <td className="px-4 py-2 font-semibold text-black print:px-3 print:py-1">
-                                        IGST Amount
-                                    </td>
-                                    <td className="px-4 py-2 text-right font-medium print:px-3 print:py-1">
-                                        ₹ {format(igstAmount)}
-                                    </td>
-                                </tr>
-                            </>
-                        )}
+      <tr className="bg-gray-100 print:bg-transparent font-bold">
+        <td className="px-4 py-2 text-black print:px-3 print:py-1">
+          Grand Total (Incl. GST)
+        </td>
+        <td className="px-4 py-2 text-right text-black print:px-3 print:py-1">
+          ₹ {format(grandTotal)}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-                        <tr className="bg-gray-100 print:bg-transparent font-bold">
-                            <td className="px-4 py-2 text-black print:px-3 print:py-1">
-                                Grand Total (Incl. GST{igst > 0 ? " + IGST" : ""})
-                            </td>
-                            <td className="px-4 py-2 text-right text-black print:px-3 print:py-1">
-                                ₹ {format(grandTotal)}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
     )
 }
