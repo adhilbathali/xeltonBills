@@ -21,27 +21,6 @@ declare global {
       updateCustomer: (customer: Customer) => Promise<Customer>;
       deleteCustomer: (id: number) => Promise<number>;
 
-      // C&F SUPPLIERS
-      getCandFs: () => Promise<CANDF[]>;
-      addCandF: (candf: CANDF) => Promise<CANDF>;
-      updateCandF: (candf: CANDF) => Promise<CANDF>;
-      deleteCandF: (id: number) => Promise<number>;
-
-      // PURCHASE MASTER
-      getPurchaseMasters: () => Promise<PurchaseMaster[]>;
-      addPurchaseMaster: (
-        purchaseMaster: PurchaseMaster
-      ) => Promise<{ id: number }>;
-      deletePurchaseMaster: (
-        id: number
-      ) => Promise<{ success: boolean; message?: string }>;
-
-      // PURCHASE ITEMS
-      addPurchaseItems: (args: {
-        purchaseId: number;
-        purchaseItems: PurchaseItem[];
-      }) => Promise<{ success: boolean }>;
-
       // INVOICE MASTER
       getInvoiceMasters: () => Promise<InvoiceMaster[]>;
       addInvoiceMaster: (

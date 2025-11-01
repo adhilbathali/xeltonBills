@@ -34,6 +34,7 @@ export default function ProductsTable({ products, onDelete, onEdit }: Props) {
             <TableHead className="text-center"><span className="flex justify-center items-center">MRP (<IndianRupeeIcon size={15} />)</span></TableHead>
             <TableHead className="text-center"><span className="flex justify-center items-center">PTR (<IndianRupeeIcon size={15} />)</span></TableHead>
             <TableHead className="text-center"><span className="flex justify-center items-center">PTS (<IndianRupeeIcon size={15} />)</span></TableHead>
+            <TableHead className="text-center"><span className="flex justify-center items-center">PTD (<IndianRupeeIcon size={15} />)</span></TableHead>
             <TableHead className="text-center"><span className="flex justify-center items-center">GST (%)</span></TableHead>
             <TableHead className="text-center"><div className="text-wrap text-center">Manage</div></TableHead>
           </TableRow>
@@ -48,6 +49,7 @@ export default function ProductsTable({ products, onDelete, onEdit }: Props) {
               <TableCell className="text-center">{product.mrp.toString()}</TableCell>
               <TableCell className="text-center">{product.ptr.toString()}</TableCell>
               <TableCell className="text-center">{product.pts.toString()}</TableCell>
+              <TableCell className="text-center">{product.ptd.toString()}</TableCell>
               <TableCell className="text-center">{product.gst.toString()}</TableCell>
               <TableCell className="text-center" >
                 <Button onClick={() => onDelete(product.id)} className="hover:bg-slate-200" variant="ghost"><Trash2Icon className="text-red-400" /></Button>

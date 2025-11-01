@@ -3,8 +3,10 @@ export interface InvoiceItem {
     productId: number;
     invoiceId?: number;
     tradePrice: number;
-    qty: number;
+    batchNo: string;
+    mfg: Date;
     exp: Date;
+    qty: number;
     fqty: number;
     total: number;
     taxableValue?: number;

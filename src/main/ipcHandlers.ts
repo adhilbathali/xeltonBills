@@ -2,8 +2,6 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import {
   getProducts, addProduct, updateProduct, deleteProduct,
   getCustomers, addCustomer, updateCustomer, deleteCustomer,
-  getCandFs, addCandF, updateCandF, deleteCandF,
-  getPurchaseMasters, addPurchaseMaster, deletePurchaseMaster, addPurchaseItems,
   getInvoiceMasters, addInvoiceMaster, addInvoiceItems, getInvoiceItems,
   deleteInvoiceMaster,
   getInvoiceMasterById,
@@ -16,9 +14,6 @@ import fs from "fs";
 
 import { Product } from "@/renderer/types/product";
 import { Customer } from "@/renderer/types/customer";
-import { CANDF } from "@/renderer/types/cAndF";
-import { PurchaseMaster } from "@/renderer/types/purchaseMaster";
-import { PurchaseItem } from "@/renderer/types/purchaseItem";
 import { InvoiceMaster } from "@/renderer/types/invoiceMaster";
 import { InvoiceItem } from "@/renderer/types/invoiceItem";
 import path from "node:path";
@@ -39,26 +34,6 @@ ipcMain.handle("addCustomer", (_, customer: Customer) => addCustomer(customer));
 ipcMain.handle("updateCustomer", (_, customer: Customer) => updateCustomer(customer));
 ipcMain.handle("deleteCustomer", (_, id: number) => deleteCustomer(id));
 
-// ============================
-// C&F SUPPLIERS
-// ============================
-ipcMain.handle("getCandFs", () => getCandFs());
-ipcMain.handle("addCandF", (_, candf: CANDF) => addCandF(candf));
-ipcMain.handle("updateCandF", (_, candf: CANDF) => updateCandF(candf));
-ipcMain.handle("deleteCandF", (_, id: number) => deleteCandF(id));
-
-// ============================
-// PURCHASES
-// ============================
-ipcMain.handle("get-purchase-masters", () => getPurchaseMasters());
-ipcMain.handle("add-purchase-master", async (_, purchaseMaster: PurchaseMaster) => {
-  const result = await addPurchaseMaster(purchaseMaster);
-  return result;
-});
-ipcMain.handle("delete-purchase-master", (_, id: number) => deletePurchaseMaster(id));
-ipcMain.handle("add-purchase-items", (_, { purchaseId, purchaseItems }: { purchaseId: number; purchaseItems: PurchaseItem[] }) =>
-  addPurchaseItems({ purchaseId, purchaseItems })
-);
 
 // ============================
 // INVOICES

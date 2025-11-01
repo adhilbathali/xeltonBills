@@ -16,7 +16,7 @@ import { Customer } from "@/renderer/types/customer";
 
 type Props = {
   customers: Customer[];
-  onHeaderSubmit: (headerData: Omit<InvoiceMaster, "id" | "subTotal" | "grandTotal">) => void;
+  onHeaderSubmit: (headerData: Omit<InvoiceMaster, "id" | "taxableValue" | "billAmount">) => void;
 };
 
 export default function CreateHeaderDialog({ customers, onHeaderSubmit }: Props) {
@@ -30,7 +30,6 @@ export default function CreateHeaderDialog({ customers, onHeaderSubmit }: Props)
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [invoiceDate, setInvoiceDate] = useState(getToday());
   const [dueDate, setDueDate] = useState(getToday());
-  const [igst, setIgst] = useState(0);
 
   const handleSubmit = () => {
     if (!customer) return alert("Please select a customer");
@@ -42,7 +41,6 @@ export default function CreateHeaderDialog({ customers, onHeaderSubmit }: Props)
       invoiceNumber,
       invoiceDate: new Date(invoiceDate),
       dueDate: new Date(dueDate),
-      igst,
     };
 
     onHeaderSubmit(data);
@@ -96,14 +94,6 @@ export default function CreateHeaderDialog({ customers, onHeaderSubmit }: Props)
               />
             </div>
           </div>
-
-          <label className="block text-sm font-medium">IGST (%)</label>
-          <Input
-            type="number"
-            placeholder="Enter IGST"
-            value={igst}
-            onChange={(e) => setIgst(Number(e.target.value))}
-          />
         </div>
 
         <DialogFooter className="pt-4">

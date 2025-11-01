@@ -4,7 +4,6 @@ export interface InvoiceMaster {
     dueDate: Date;
     invoiceDate: Date;
     invoiceNumber: string;
-    igst: number;
-    subTotal: number;
-    grandTotal: number;
+    taxableValue: number;
+    billAmount: number;
 }

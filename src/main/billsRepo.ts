@@ -1,9 +1,6 @@
 import { Product } from "@/renderer/types/product";
 import { Customer } from "@/renderer/types/customer";
-import { CANDF } from "@/renderer/types/cAndF";
 import db from "./db";
-import { PurchaseMaster } from "@/renderer/types/purchaseMaster";
-import { PurchaseItem } from "@/renderer/types/purchaseItem";
 import { InvoiceMaster } from "@/renderer/types/invoiceMaster";
 import { InvoiceItem } from "@/renderer/types/invoiceItem";
 import { Profile } from "@/renderer/types/profile";
@@ -20,7 +17,8 @@ export function addProduct(product: Product) {
   const { productCD, hsn, uom, mrp, ptr, pts, ptd, gst } = product;
 
   const stmt = db.prepare(`
-    INSERT INTO products (productCD, hsn, uom, mrp, ptr, pts, ptd, gst)
+    INSERT INTO products (productCD, hsn, uom, mrp,
+     ptr, pts, ptd, gst)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
@@ -118,125 +116,6 @@ export function deleteCustomer(id: number) {
   return id;
 }
 
-// ============================
-// C&F / SUPPLIERS
-// ============================
-export function getCandFs(): CANDF[] {
-  return db.prepare("SELECT * FROM candf ORDER BY id DESC").all() as CANDF[];
-}
-
-export function addCandF(candf: CANDF) {
-  const { companyName, companyAddress, email, phone, gstin, pan } = candf;
-
-  db.prepare(`
-    INSERT INTO candf (companyName, companyAddress, email, phone, gstin, pan)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `).run(companyName, companyAddress, email, phone, gstin, pan);
-
-  return candf;
-}
-
-export function updateCandF(candf: CANDF) {
-  const { id, companyName, companyAddress, email, phone, gstin, pan } = candf;
-
-  if (!id) throw new Error("C&F ID is required for update.");
-
-  const stmt = db.prepare(`
-    UPDATE candf
-    SET
-      companyName = ?,
-      companyAddress = ?,
-      email = ?,
-      phone = ?,
-      gstin = ?,
-      pan = ?
-    WHERE id = ?
-  `);
-
-  stmt.run(companyName, companyAddress, email, phone, gstin, pan, id);
-
-  return candf;
-}
-
-export function deleteCandF(id: number) {
-  if (!id) throw new Error("C&F ID is required for deletion.");
-  const stmt = db.prepare("DELETE FROM candf WHERE id = ?");
-  stmt.run(id);
-  return { success: true };
-}
-
-export function getPurchaseMasters(): PurchaseMaster[] {
-  return db.prepare("SELECT * FROM purchase_master ORDER BY id DESC").all() as PurchaseMaster[];
-}
-
-export function addPurchaseMaster(purchaseMaster: PurchaseMaster) {
-  const stmt = db.prepare(`
-    INSERT INTO purchase_master (supplierId, PODate, dueDate, invoiceNumber, igst, subTotal, grandTotal)
-    VALUES (@supplierId, @PODate, @dueDate, @invoiceNumber, @igst, @subTotal, @grandTotal)
-  `)
-
-  const PODate = purchaseMaster.PODate instanceof Date
-    ? purchaseMaster.PODate.toISOString().split("T")[0]
-    : purchaseMaster.PODate;
-
-  const dueDate = purchaseMaster.dueDate instanceof Date
-    ? purchaseMaster.dueDate.toISOString().split("T")[0]
-    : purchaseMaster.dueDate;
-
-
-  const result = stmt.run({
-    supplierId: purchaseMaster.supplierId,
-    PODate: PODate,
-    dueDate: dueDate,
-    invoiceNumber: purchaseMaster.invoiceNumber,
-    igst: purchaseMaster.igst,
-    subTotal: purchaseMaster.subTotal,
-    grandTotal: purchaseMaster.grandTotal,
-  })
-  return { id: result.lastInsertRowid };
-
-}
-
-export function deletePurchaseMaster(id: number) {
-  try {
-    const stmt = db.prepare(`DELETE FROM purchase_master WHERE id = ?`)
-    const result = stmt.run(id)
-
-    if (result.changes === 0) {
-      return { success: false, message: "No purchase found with given ID" }
-    }
-
-    return { success: true, message: "Purchase deleted successfully" }
-  } catch (error) {
-    console.error("Error deleting purchase:", error)
-    return { success: false, message: "Error deleting purchase" }
-  }
-}
-
-export function addPurchaseItems({ purchaseId, purchaseItems }: { purchaseId: number, purchaseItems: PurchaseItem[] }) {
-  const stmt = db.prepare(`
-    INSERT INTO purchase_items (purchaseId, productId, purchaseRate, qty, fqty, total, disc)
-    VALUES (@purchaseId, @productId, @purchaseRate, @qty, @fqty, @total, @disc)
-  `)
-
-  const insertMany = db.transaction((purchaseItems: PurchaseItem[]) => {
-    for (const item of purchaseItems) {
-      stmt.run({
-        purchaseId,
-        productId: item.productId,
-        purchaseRate: item.purchaseRate,
-        qty: item.qty,
-        fqty: item.fqty,
-        total: item.total,
-        disc: item.disc,
-      })
-    }
-  })
-
-  insertMany(purchaseItems)
-  return { success: true }
-}
-
 export function addInvoiceMaster(master: Omit<InvoiceMaster, "id">): number {
   const stmt = db.prepare(`
     INSERT INTO invoice_master (
@@ -244,10 +123,9 @@ export function addInvoiceMaster(master: Omit<InvoiceMaster, "id">): number {
       invoiceDate,
       dueDate,
       invoiceNumber,
-      igst,
-      subTotal,
-      grandTotal
-    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+      taxableValue,
+      billAmount
+    ) VALUES (?, ?, ?, ?, ?, ?)
   `);
 
   const info = stmt.run(
@@ -255,9 +133,8 @@ export function addInvoiceMaster(master: Omit<InvoiceMaster, "id">): number {
     master.invoiceDate instanceof Date ? master.invoiceDate.toISOString().split("T")[0] : master.invoiceDate,
     master.dueDate instanceof Date ? master.dueDate.toISOString().split("T")[0] : master.dueDate,
     master.invoiceNumber,
-    master.igst,
-    master.subTotal,
-    master.grandTotal
+    master.taxableValue,
+    master.billAmount
   );
 
   // ✅ Always return an integer
@@ -272,6 +149,7 @@ export function addInvoiceMaster(master: Omit<InvoiceMaster, "id">): number {
 // ============================
 export function getInvoiceMasters(): InvoiceMaster[] {
   const rows = db.prepare("SELECT * FROM invoice_master ORDER BY id DESC").all();
+  console.log(rows)
   return rows.map((row: any) => ({
     ...row,
     invoiceDate: new Date(row.invoiceDate),
@@ -290,8 +168,10 @@ export function addInvoiceItems(
     INSERT INTO invoice_items (
       invoiceId,
       productId,
+      batchNo,
       tradePrice,
       qty,
+      mfg,
       exp,
       fqty,
       total,
@@ -299,8 +179,10 @@ export function addInvoiceItems(
     ) VALUES (
       @invoiceId,
       @productId,
+      @batchNo,
       @tradePrice,
       @qty,
+      @mfg,
       @exp,
       @fqty,
       @total,
@@ -313,6 +195,7 @@ export function addInvoiceItems(
       stmt.run({
         ...item,
         invoiceId,
+        mfg: item.mfg.toISOString(),
         exp: item.exp.toISOString(),
       });
     }
@@ -330,6 +213,7 @@ export function getInvoiceItems(): InvoiceItem[] {
 
   return rows.map((row: any) => ({
     ...row,
+    mfg: new Date(row.mfg),
     exp: new Date(row.exp),
   })) as InvoiceItem[];
 }
@@ -377,6 +261,7 @@ export function getInvoiceItemsByInvoiceId(invoiceId: number) {
 
   return rows.map((row: any) => ({
     ...row,
+    mfg: new Date(row.mfg),
     exp: new Date(row.exp),
   })) as InvoiceItem[];
 }

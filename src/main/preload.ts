@@ -1,9 +1,6 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { Product } from "@/renderer/types/product";
 import { Customer } from "@/renderer/types/customer";
-import { CANDF } from "@/renderer/types/cAndF";
-import { PurchaseMaster } from "@/renderer/types/purchaseMaster";
-import { PurchaseItem } from "@/renderer/types/purchaseItem";
 import { InvoiceMaster } from "@/renderer/types/invoiceMaster";
 import { InvoiceItem } from "@/renderer/types/invoiceItem";
 import { Profile } from "@/renderer/types/profile";
@@ -24,23 +21,6 @@ contextBridge.exposeInMainWorld("api", {
   addCustomer: (customer: Customer) => ipcRenderer.invoke("addCustomer", customer),
   updateCustomer: (customer: Customer) => ipcRenderer.invoke("updateCustomer", customer),
   deleteCustomer: (id: number) => ipcRenderer.invoke("deleteCustomer", id),
-
-  // ============================
-  // C&F
-  // ============================
-  getCandFs: () => ipcRenderer.invoke("getCandFs"),
-  addCandF: (candf: CANDF) => ipcRenderer.invoke("addCandF", candf),
-  updateCandF: (candf: CANDF) => ipcRenderer.invoke("updateCandF", candf),
-  deleteCandF: (id: number) => ipcRenderer.invoke("deleteCandF", id),
-
-  // ============================
-  // PURCHASES
-  // ============================
-  getPurchaseMasters: () => ipcRenderer.invoke("get-purchase-masters"),
-  addPurchaseMaster: (purchaseMaster: PurchaseMaster) => ipcRenderer.invoke("add-purchase-master", purchaseMaster),
-  deletePurchaseMaster: (id: number) => ipcRenderer.invoke("delete-purchase-master", id),
-  addPurchaseItems: ({ purchaseId, purchaseItems }: { purchaseId: number; purchaseItems: PurchaseItem[] }) =>
-    ipcRenderer.invoke("add-purchase-items", { purchaseId, purchaseItems }),
 
   // ============================
   // INVOICES

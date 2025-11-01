@@ -40,20 +40,6 @@ db.prepare(`
   )
 `).run()
 
-// ============================
-// C&F / SUPPLIERS TABLE
-// ============================
-db.prepare(`
-  CREATE TABLE IF NOT EXISTS candf (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    companyName TEXT,
-    companyAddress TEXT,
-    email TEXT,
-    phone TEXT,
-    gstin TEXT,
-    pan TEXT
-  )
-`).run()
 
 // ============================
 // CUSTOMERS TABLE
@@ -75,57 +61,21 @@ db.prepare(`
 `).run()
 
 
-// ============================
-// PURCHASE MASTER TABLE
-// ============================
-db.prepare(`
-  CREATE TABLE IF NOT EXISTS purchase_master (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    supplierId INTEGER,
-    PODate TEXT,
-    dueDate TEXT,
-    invoiceNumber TEXT,
-    igst REAL,
-    subTotal REAL,
-    grandTotal REAL,
-    FOREIGN KEY (supplierId) REFERENCES candf(id) ON DELETE SET NULL
-  )
-`).run();
-
-// ============================
-// PURCHASE ITEMS TABLE
-// ============================
-db.prepare(`
-  CREATE TABLE IF NOT EXISTS purchase_items (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    purchaseId INTEGER,
-    productId INTEGER,
-    purchaseRate REAL,
-    qty REAL,
-    fqty REAL,
-    total REAL,
-    disc REAL,
-    FOREIGN KEY (purchaseId) REFERENCES purchase_master(id) ON DELETE CASCADE,
-    FOREIGN KEY (productId) REFERENCES products(id)
-  )
-`).run();
-
 
 // ============================
 // INVOICE MASTER TABLE
 // ============================
 db.prepare(`
   CREATE TABLE IF NOT EXISTS invoice_master (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    customerId INTEGER,
-    invoiceDate TEXT,
-    dueDate TEXT,
-    invoiceNumber TEXT,
-    igst REAL,
-    subTotal REAL,
-    grandTotal REAL,
-    FOREIGN KEY (customerId) REFERENCES customers(id) ON DELETE SET NULL
-  )
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  customerId INTEGER,
+  invoiceDate TEXT,
+  dueDate TEXT,
+  invoiceNumber TEXT,
+  taxableValue REAL,
+  billAmount REAL,
+  FOREIGN KEY (customerId) REFERENCES customers(id) ON DELETE SET NULL
+);
 `).run();
 
 // ============================
@@ -137,8 +87,10 @@ db.prepare(`
     invoiceId INTEGER,
     productId INTEGER,
     tradePrice REAL,
+    batchNo REAL,
     qty REAL,
     exp TEXT,
+    mfg TEXT,
     fqty REAL,
     total REAL,
     disc REAL,
@@ -146,6 +98,8 @@ db.prepare(`
     FOREIGN KEY (productId) REFERENCES products(id)
   )
 `).run();
+
+// Profile
 
 db.prepare(`
   CREATE TABLE IF NOT EXISTS profile (

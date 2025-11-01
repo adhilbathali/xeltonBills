@@ -60,7 +60,7 @@ useEffect(() => {
     if (!invoiceMaster) return;
     const subtotal = invoiceItems.reduce((acc, item) => acc + item.total, 0);
     setSubTotal(subtotal);
-    const grand = subtotal + (invoiceMaster.igst / 100) * subtotal;
+    const grand = subtotal;
     setGrandTotal(grand);
   }, [invoiceItems, invoiceMaster]);
 
@@ -106,7 +106,6 @@ useEffect(() => {
       />
 
       <InvoiceItemsTable
-        igst={invoiceMaster.igst}
         products={products}
         invoiceItems={invoiceItems}
         setSubTotal={setSubTotal}

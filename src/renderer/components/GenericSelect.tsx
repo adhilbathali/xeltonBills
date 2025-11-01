@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { CANDF } from "../types/cAndF"
 import { Customer } from "../types/customer"
 import { Product } from "../types/product"
 import {
@@ -10,7 +9,7 @@ import {
   SelectValue,
 } from "./ui/select"
 
-type Option = Customer | CANDF | Product
+type Option = Customer | Product
 
 type Props = {
   id?: string,
@@ -22,8 +21,8 @@ type Props = {
 export default function GenericSelect({ selectType, options, onSelect, id }: Props){
 
 
-  let label: keyof Customer | keyof CANDF | keyof Product;
-  if (selectType === "customers" || selectType === "suppliers") {
+  let label: keyof Customer | keyof Product;
+  if (selectType === "customers") {
     label = "companyName";
   } else if (selectType === "products") {
     label = "productCD"

@@ -43,7 +43,7 @@ export default function Invoices() {
   // ====== Derived Quick Stats ======
   const totalInvoices = invoiceMasters.length;
   const totalSales = invoiceMasters.reduce(
-    (sum, inv) => sum + (inv.grandTotal || 0),
+    (sum, inv) => sum + (inv.billAmount || 0),
     0
   );
   const totalItemsSold = invoiceItems.reduce(

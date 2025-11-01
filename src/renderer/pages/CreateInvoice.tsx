@@ -29,7 +29,7 @@ useEffect(() => {
 
   // ===== Handle Header Dialog Submit =====
   const handleHeaderSubmit = (
-    data: Omit<InvoiceMaster, "id" | "subTotal" | "grandTotal">
+    data: Omit<InvoiceMaster, "id" | "taxableValue" | "billAmount">
   ) => {
     setHeaderData(data);
     console.log("Header Data Saved:", data);
@@ -70,7 +70,6 @@ useEffect(() => {
     const subtotal = invoiceItems.reduce((acc, item) => acc + (item.taxableValue || 0), 0);
     setSubTotal(subtotal);
 
-    const igst = headerData?.igst ?? 0;
     const grand = invoiceItems.reduce((acc, item) => acc + (item.total || 0), 0);
     setGrandTotal(grand);
   }, [invoiceItems, headerData]);
@@ -98,12 +97,13 @@ useEffect(() => {
       // 1️⃣ Save Invoice Master first
       const invoiceMasterData = {
         ...headerData,
-        subTotal,
-        grandTotal,
+        taxableValue: subTotal,
+        billAmount: grandTotal,
       } as Omit<InvoiceMaster, "id">;
 
       const { id: invoiceId } = await window.api.addInvoiceMaster(invoiceMasterData);
       console.log("✅ Invoice Master Saved with ID:", invoiceId);
+      
 
       // 2️⃣ Save Invoice Items using that ID
       const itemsToSave = invoiceItems.map((item) => ({
@@ -171,7 +171,6 @@ useEffect(() => {
       {/* ===== Invoice Items Table ===== */}
       <InvoiceItemsTable2
         onDelete={handleDeleteItem}
-        igst={headerData?.igst ?? 18}
         products={products}
         invoiceItems={invoiceItems}
         setSubTotal={setSubTotal}
