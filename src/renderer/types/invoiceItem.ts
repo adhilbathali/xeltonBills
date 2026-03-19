@@ -2,6 +2,9 @@ export interface InvoiceItem {
     id: number;
     productId: number;
     invoiceId?: number;
+    mrp: number;
+    ptr: number;
+    pts: number;
     tradePrice: number;
     batchNo: string;
     mfg: Date;

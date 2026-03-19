@@ -28,6 +28,9 @@ export default function CreateInvoiceItemDialog({ products, onAddItem }: Props) 
   // Form state
   const [formData, setFormData] = useState({
     productId: 0,
+    mrp: 0,
+    ptr: 0,
+    pts: 0,
     tradePrice: 0,
     batchNo: "",
     qty: 0,
@@ -43,6 +46,9 @@ export default function CreateInvoiceItemDialog({ products, onAddItem }: Props) 
     setFormData((prev) => ({
       ...prev,
       productId: product.id,
+      mrp: product.mrp,
+      ptr: product.ptr,
+      pts: product.pts,
       tradePrice: product.ptd,
       gst: product.gst || 0,
     }))
@@ -89,6 +95,9 @@ export default function CreateInvoiceItemDialog({ products, onAddItem }: Props) 
     // Reset form
     setFormData({
       productId: 0,
+      mrp: 0,
+      ptr: 0, 
+      pts: 0,
       tradePrice: 0,
       batchNo: "",
       qty: 0,

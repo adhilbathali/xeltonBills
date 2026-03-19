@@ -124,6 +124,7 @@ useEffect(() => {
       setSubTotal(0);
       setGrandTotal(0);
     } catch (error) {
+      console.log(invoiceItems)
       console.error("❌ Error saving invoice:", error);
       alert("Failed to save invoice due to invalid data.");
     } finally {

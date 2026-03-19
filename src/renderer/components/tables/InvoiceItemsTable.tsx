@@ -75,6 +75,9 @@ export default function InvoiceItemsTable({
                 "Qty",
                 "F.Qty",
                 "UOM",
+                "MRP",
+                "PTR",
+                "PTS",
                 "Rate",
                 "Disc%",
                 "Taxable Value",
@@ -84,7 +87,7 @@ export default function InvoiceItemsTable({
               ].map((head, i) => (
                 <TableHead
                   key={i}
-                  className="px-3 py-2 font-semibold text-black text-left print:px-2 print:py-1"
+                  className="px-2 py-2 font-semibold text-black text-left print:px-2 print:py-1"
                 >
                   {head}
                 </TableHead>
@@ -114,49 +117,58 @@ export default function InvoiceItemsTable({
                     key={idx}
                     className="border-b last:border-b-0 border-gray-100 print:border-b-1 print:border-gray-200"
                   >
-                    <TableCell className="px-3 py-2 print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 print:px-2 print:py-1">
                       {idx + 1}
                     </TableCell>
-                    <TableCell className="px-3 py-2 print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 print:px-2 print:py-1">
                       {product?.productCD}
                     </TableCell>
-                    <TableCell className="px-3 py-2 print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 print:px-2 print:py-1">
                       {product?.hsn}
                     </TableCell>
-                    <TableCell className="px-3 py-2 print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 print:px-2 print:py-1">
                       {item.batchNo || "-"}
                     </TableCell>
-                    <TableCell className="px-3 py-2 print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 print:px-2 print:py-1">
                       {new Date(item.mfg).toLocaleDateString("en-GB")}
                     </TableCell>
-                    <TableCell className="px-3 py-2 print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 print:px-2 print:py-1">
                       {new Date(item.exp).toLocaleDateString("en-GB")}
                     </TableCell>
-                    <TableCell className="px-3 py-2 text-right print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 text-right print:px-2 print:py-1">
                       {item.qty}
                     </TableCell>
-                    <TableCell className="px-3 py-2 text-right print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 text-right print:px-2 print:py-1">
                       {item.fqty}
                     </TableCell>
-                    <TableCell className="px-3 py-2 print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 print:px-2 print:py-1">
                       {product?.uom}
                     </TableCell>
-                    <TableCell className="px-3 py-2 text-right print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 text-right print:px-2 print:py-1">
+                      {format(item.mrp)}
+                    </TableCell>
+                    <TableCell className="px-2 py-1 text-right print:px-2 print:py-1">
+                      {format(item.ptr)}
+                    </TableCell>
+                    <TableCell className="px-2 py-1 text-right print:px-2 print:py-1">
+                      {format(item.pts)}
+                    </TableCell>
+                    <TableCell className="px-2 py-1 text-right print:px-2 print:py-1">
                       {format(item.tradePrice)}
                     </TableCell>
-                    <TableCell className="px-3 py-2 text-right print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 text-right print:px-2 print:py-1">
                       {item.disc}%
                     </TableCell>
-                    <TableCell className="px-3 py-2 text-right font-medium print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 text-right font-medium print:px-2 print:py-1">
                       {format(taxable)}
                     </TableCell>
-                    <TableCell className="px-3 py-2 text-right print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 text-right print:px-2 print:py-1">
                       {gst}%
                     </TableCell>
-                    <TableCell className="px-3 py-2 text-right print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 text-right print:px-2 print:py-1">
                       {format(gstAmount)}
                     </TableCell>
-                    <TableCell className="px-3 py-2 text-right font-semibold print:px-2 print:py-1">
+                    <TableCell className="px-2 py-1 text-right font-semibold print:px-2 print:py-1">
                       {format(item.total)}
                     </TableCell>
                   </TableRow>

@@ -195,15 +195,15 @@
   /* COLUMN WIDTHS (commented for clarity) */
   /* 1: Sl.No */
   .invoice-print-table th:nth-child(1),
-  .invoice-print-table td:nth-child(1) { width: 4.3% !important; }
+  .invoice-print-table td:nth-child(1) { width: 4.9% !important; }
 
   /* 2: Product Name */
   .invoice-print-table th:nth-child(2),
-  .invoice-print-table td:nth-child(2) { width: 18% !important; }
+  .invoice-print-table td:nth-child(2) { width: 15% !important; }
 
   /* 3: HSN */
   .invoice-print-table th:nth-child(3),
-  .invoice-print-table td:nth-child(3) { width: 6.5% !important; }
+  .invoice-print-table td:nth-child(3) { width: 7.1% !important; }
 
   /* 4: Batch No */
   .invoice-print-table th:nth-child(4),
@@ -227,31 +227,43 @@
 
   /* 9: UOM */
   .invoice-print-table th:nth-child(9),
-  .invoice-print-table td:nth-child(9) { width: 4% !important; }
+  .invoice-print-table td:nth-child(9) { width: 4.2% !important; }
 
-  /* 10: Rate */
-  .invoice-print-table th:nth-child(10),
-  .invoice-print-table td:nth-child(10) { width: 4% !important; }
+  /* 10: MRP */
+.invoice-print-table th:nth-child(10),
+.invoice-print-table td:nth-child(10) { width: 5% !important; }
 
-  /* 11: Disc% */
-  .invoice-print-table th:nth-child(11),
-  .invoice-print-table td:nth-child(11) { width: 4% !important; }
+/* 11: PTR */
+.invoice-print-table th:nth-child(11),
+.invoice-print-table td:nth-child(11) { width: 5% !important; }
 
-  /* 12: Taxable Value */
-  .invoice-print-table th:nth-child(12),
-  .invoice-print-table td:nth-child(12) { width: 8% !important; }
+/* 12: PTS */
+.invoice-print-table th:nth-child(12),
+.invoice-print-table td:nth-child(12) { width: 5% !important; }
 
-  /* 13: GST% */
-  .invoice-print-table th:nth-child(13),
-  .invoice-print-table td:nth-child(13) { width: 4% !important; }
+/* 13: Rate */
+.invoice-print-table th:nth-child(13),
+.invoice-print-table td:nth-child(13) { width: 5% !important; }
 
-  /* 14: GST Amount */
-  .invoice-print-table th:nth-child(14),
-  .invoice-print-table td:nth-child(14) { width: 7% !important; }
+/* 14: Disc% */
+.invoice-print-table th:nth-child(14),
+.invoice-print-table td:nth-child(14) { width: 4.2% !important; }
 
-  /* 15: Total (Incl. GST) */
-  .invoice-print-table th:nth-child(15),
-  .invoice-print-table td:nth-child(15) { width: 8% !important; }
+/* 15: Taxable */
+.invoice-print-table th:nth-child(15),
+.invoice-print-table td:nth-child(15) { width: 7% !important; }
+
+/* 16: GST% */
+.invoice-print-table th:nth-child(16),
+.invoice-print-table td:nth-child(16) { width: 4% !important; }
+
+/* 17: GST Amount */
+.invoice-print-table th:nth-child(17),
+.invoice-print-table td:nth-child(17) { width: 6.6% !important; }
+
+/* 18: Total */
+.invoice-print-table th:nth-child(18),
+.invoice-print-table td:nth-child(18) { width: 7% !important; }
 
   /* ==============================
      FOOTER TOTALS SECTION
